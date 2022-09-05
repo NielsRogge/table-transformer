@@ -20,7 +20,7 @@ import datasets.transforms as R
 
 import table_datasets as TD
 from table_datasets import PDFTablesDataset
-from eval import eval_coco
+# from eval import eval_coco
 
 
 def get_args():
