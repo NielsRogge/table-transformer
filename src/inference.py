@@ -27,7 +27,7 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--data_root_dir',
-                        required=True,
+                        required=False,
                         help="Root data directory for images and labels")
     parser.add_argument('--config_file',
                         required=True,
