@@ -266,7 +266,7 @@ def main():
 
     # postprocess the outputs
     processed_outputs = postprocess(outputs,
-                                    torch.tensor([image.size[::-1]].unsqueeze(0))
+                                    torch.tensor([image.size[::-1]]).unsqueeze(0),
     )
     print("Processed outputs:", processed_outputs)
 
