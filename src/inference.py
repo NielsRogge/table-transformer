@@ -33,7 +33,7 @@ def plot_results(pil_img, prob, boxes):
     plt.figure(figsize=(16,10))
     plt.imshow(pil_img)
     ax = plt.gca()
-    for p, (xmin, ymin, xmax, ymax), c in zip(prob, boxes.tolist(), colors):
+    for p, (xmin, ymin, xmax, ymax) in zip(prob, boxes.tolist()):
         ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
                                    fill=False, color="red", linewidth=3))
         cl = p.argmax()
