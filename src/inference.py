@@ -27,6 +27,23 @@ from PIL import Image
 from models.detr import PostProcess
 
 
+import matplotlib.pyplot as plt
+
+def plot_results(pil_img, prob, boxes):
+    plt.figure(figsize=(16,10))
+    plt.imshow(pil_img)
+    ax = plt.gca()
+    for p, (xmin, ymin, xmax, ymax), c in zip(prob, boxes.tolist(), colors):
+        ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
+                                   fill=False, color="red", linewidth=3))
+        cl = p.argmax()
+        text = "table"
+        ax.text(xmin, ymin, text, fontsize=15,
+                bbox=dict(facecolor='yellow', alpha=0.5))
+    plt.axis('off')
+    plt.show()
+
+
 def get_args():
     parser = argparse.ArgumentParser()
 
@@ -264,11 +281,16 @@ def main():
 
     postprocess = PostProcess()
 
-    # postprocess the outputs
+    # keep only predictions of queries with 0.9+ confidence (excluding no-object class)
+    probas = outputs["pred_logits"].softmax(-1)[0, :, :-1]
+    keep = probas.max(-1).values > 0.9
+
+    # rescale the boxes
     processed_outputs = postprocess(outputs,
                                     torch.tensor([image.size[::-1]]),
     )
-    print("Processed outputs:", processed_outputs)
+    bboxes_scaled = processed_outputs[0]['boxes'][keep]
+    plot_results(image, probas[keep], bboxes_scaled)
 
     # if args.mode == "train":
     #     train(args, model, criterion, postprocessors, device)
