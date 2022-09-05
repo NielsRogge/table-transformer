@@ -31,7 +31,7 @@ def get_args():
     parser.add_argument('--data_root_dir',
                         required=False,
                         help="Root data directory for images and labels")
-    parser.add_argument('--img_path',
+    parser.add_argument('--image_path',
                         required=True,
                         help="Filepath to image to use for inference")
     parser.add_argument('--config_file',
