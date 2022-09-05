@@ -218,11 +218,10 @@ def resize(image):
     
     return resized_image
 
-
-normalize = R.Compose([
-    R.ToTensor(),
-    R.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
+def normalize(image):
+    image = F.to_tensor(image)
+    image = F.normalize(image, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    return image
 
 
 def main():
