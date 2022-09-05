@@ -20,6 +20,7 @@ import datasets.transforms as R
 
 import table_datasets as TD
 from table_datasets import PDFTablesDataset
+from torchvision.transforms import functional as F
 # from eval import eval_coco
 
 
@@ -29,6 +30,9 @@ def get_args():
     parser.add_argument('--data_root_dir',
                         required=False,
                         help="Root data directory for images and labels")
+    parser.add_argument('--img_path',
+                        required=True,
+                        help="Filepath to image to use for inference")
     parser.add_argument('--config_file',
                         required=True,
                         help="Filepath to the config containing the args")
@@ -204,6 +208,22 @@ def get_model(args, device):
     return model, criterion, postprocessors
 
 
+def resize(image):
+    width, height = image.size
+    current_max_size = max(width, height)
+    target_max_size = random.randint(800, 800)
+    scale = target_max_size / current_max_size
+    resized_image = image.resize((int(round(scale*width)), int(round(scale*height))))
+    
+    return resized_image
+
+
+normalize = R.Compose([
+    R.ToTensor(),
+    R.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+
 def main():
     cmd_args = get_args().__dict__
     config_args = json.load(open(cmd_args['config_file'], 'rb'))
@@ -230,6 +250,15 @@ def main():
     device = torch.device(args.device)
     model, criterion, postprocessors = get_model(args, device)
     print("Loaded the model.")
+
+    # prepare image for the model (replicate R.Compose([RandomMaxResize(800, 800), normalize]))
+    image = Image.open(args.image_path).convert("RGB")
+    pixel_values = normalize(resize(image)).unsqueeze(0).to(device)
+
+    print("Shape of pixel values:", pixel_values.shape)
+
+    outputs = model(pixel_values)
+    print("Shape of logits:", outputs["pred_logits"].shape)
 
     # if args.mode == "train":
     #     train(args, model, criterion, postprocessors, device)
