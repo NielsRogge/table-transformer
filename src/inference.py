@@ -41,7 +41,8 @@ def plot_results(pil_img, prob, boxes):
         ax.text(xmin, ymin, text, fontsize=15,
                 bbox=dict(facecolor='yellow', alpha=0.5))
     plt.axis('off')
-    plt.show()
+    # plt.show()
+    plt.savefig('result.png')
 
 
 def get_args():
