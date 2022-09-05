@@ -24,6 +24,8 @@ from torchvision.transforms import functional as F
 from PIL import Image
 # from eval import eval_coco
 
+from models.detr import PostProcess
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -259,6 +261,14 @@ def main():
 
     outputs = model(pixel_values)
     print("Shape of logits:", outputs["pred_logits"].shape)
+
+    postprocess = PostProcess()
+
+    # postprocess the outputs
+    processed_outputs = postprocess(outputs,
+                                    torch.tensor([image.size[::-1]].unsqueeze(0))
+    )
+    print("Processed outputs:", processed_outputs)
 
     # if args.mode == "train":
     #     train(args, model, criterion, postprocessors, device)
