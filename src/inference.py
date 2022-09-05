@@ -21,6 +21,7 @@ import datasets.transforms as R
 import table_datasets as TD
 from table_datasets import PDFTablesDataset
 from torchvision.transforms import functional as F
+from PIL import Image
 # from eval import eval_coco
 
 
