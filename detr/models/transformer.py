@@ -76,13 +76,8 @@ class TransformerEncoder(nn.Module):
         output = src
 
         for idx, layer in enumerate(self.layers):
-            if idx == 0:
-                print(f"Hidden states before layer {idx}:", output[:3, 0, :3])
             output = layer(output, src_mask=mask,
                            src_key_padding_mask=src_key_padding_mask, pos=pos)
-            
-            if idx == 0:
-                print(f"Hidden states after layer {idx}:", output[:3, 0, :3])
 
         if self.norm is not None:
             output = self.norm(output)
@@ -110,12 +105,18 @@ class TransformerDecoder(nn.Module):
 
         intermediate = []
 
-        for layer in self.layers:
+        for idx, layer in enumerate(self.layers):
+            if idx == 0:
+                print(f"Hidden states before layer {idx}:", output[:3, 0, :3])
+            
             output = layer(output, memory, tgt_mask=tgt_mask,
                            memory_mask=memory_mask,
                            tgt_key_padding_mask=tgt_key_padding_mask,
                            memory_key_padding_mask=memory_key_padding_mask,
                            pos=pos, query_pos=query_pos)
+
+            if idx == 0:
+                print(f"Hidden states after layer {idx}:", output[:3, 0, :3])
             if self.return_intermediate:
                 intermediate.append(self.norm(output))
 
