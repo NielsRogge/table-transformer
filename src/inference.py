@@ -30,15 +30,18 @@ from models.detr import PostProcess
 import matplotlib.pyplot as plt
 
 classes = ["table", "table column", "table row", "table column header", "table projected row header", "table spanning cell"]
+colors = ["red", "blue", "green", "yellow", "orange", "violet"]
 
 def plot_results(pil_img, prob, boxes):
     plt.figure(figsize=(16,10))
     plt.imshow(pil_img)
     ax = plt.gca()
     for p, (xmin, ymin, xmax, ymax) in zip(prob, boxes.tolist()):
-        ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
-                                   fill=False, color="red", linewidth=3))
         cl = p.argmax()
+        color = colors[cl.item()]
+        ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
+                                   fill=False, color=color, linewidth=3))
+        
         text = classes[cl.item()]
         ax.text(xmin, ymin, text, fontsize=15,
                 bbox=dict(facecolor='yellow', alpha=0.5))
