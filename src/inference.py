@@ -29,6 +29,8 @@ from models.detr import PostProcess
 
 import matplotlib.pyplot as plt
 
+classes = ["table", "table column", "table row", "table column header", "table projected row header", "table spanning cell"]
+
 def plot_results(pil_img, prob, boxes):
     plt.figure(figsize=(16,10))
     plt.imshow(pil_img)
@@ -37,7 +39,7 @@ def plot_results(pil_img, prob, boxes):
         ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
                                    fill=False, color="red", linewidth=3))
         cl = p.argmax()
-        text = "table"
+        text = classes[cl.item()]
         ax.text(xmin, ymin, text, fontsize=15,
                 bbox=dict(facecolor='yellow', alpha=0.5))
     plt.axis('off')
