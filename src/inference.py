@@ -269,6 +269,7 @@ def main():
     print("loading model")
     device = torch.device(args.device)
     model, criterion, postprocessors = get_model(args, device)
+    model.eval()
     print("Loaded the model.")
 
     # prepare image for the model (replicate R.Compose([RandomMaxResize(800, 800), normalize]))
