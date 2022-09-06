@@ -40,7 +40,7 @@ def plot_results(pil_img, prob, boxes):
         cl = p.argmax()
         color = colors[cl.item()]
         ax.add_patch(plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
-                                   fill=False, color=color, linewidth=3))
+                                   fill=False, color=color, linewidth=1))
         
         text = classes[cl.item()]
         ax.text(xmin, ymin, text, fontsize=15,
