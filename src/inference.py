@@ -229,10 +229,10 @@ def get_model(args, device):
     return model, criterion, postprocessors
 
 
-def resize(image):
+def resize(image, data_type):
     width, height = image.size
     current_max_size = max(width, height)
-    target_max_size = random.randint(800, 800)
+    target_max_size = 800 if data_type == "detection" else 1000
     scale = target_max_size / current_max_size
     resized_image = image.resize((int(round(scale*width)), int(round(scale*height))))
     
@@ -274,7 +274,7 @@ def main():
 
     # prepare image for the model (replicate R.Compose([RandomMaxResize(800, 800), normalize]))
     image = Image.open(args.image_path).convert("RGB")
-    pixel_values = normalize(resize(image)).unsqueeze(0).to(device)
+    pixel_values = normalize(resize(image, args.data_type)).unsqueeze(0).to(device)
 
     print("Shape of pixel values:", pixel_values.shape)
 
