@@ -286,6 +286,7 @@ def main():
     outputs = model(pixel_values)
     print("Shape of logits:", outputs["pred_logits"].shape)
     print("First value of logits:", outputs["pred_logits"][0,:3,:3])
+    print("First value of boxes:", outputs["pred_boxes"][0,:3,:3])
 
     postprocess = PostProcess()
 
