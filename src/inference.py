@@ -620,17 +620,19 @@ def visualize_cells(img, cells, out_path):
     plt.imshow(img, interpolation="lanczos")
     plt.gcf().set_size_inches(20, 20)
     ax = plt.gca()
+
+    print("Cells:", cells)
     
     for cell in cells:
         bbox = cell['bbox']
 
-        if cell['column header']:
+        if cell["label"] == 'column header':
             facecolor = (1, 0, 0.45)
             edgecolor = (1, 0, 0.45)
             alpha = 0.3
             linewidth = 2
             hatch='//////'
-        elif cell['projected row header']:
+        elif cell["label"] == 'projected row header':
             facecolor = (0.95, 0.6, 0.1)
             edgecolor = (0.95, 0.6, 0.1)
             alpha = 0.3
@@ -821,6 +823,8 @@ class TableExtractionPipeline(object):
 
 
 def output_result(key, val, args, img, img_file):
+    print("Key:", key)
+    print("Value:", val)
     if key == 'objects':
         if args.verbose:
             print(val)
@@ -830,6 +834,7 @@ def output_result(key, val, args, img, img_file):
         if args.visualize:
             out_file = img_file.replace(".jpg", "_fig_tables.jpg")
             out_path = os.path.join(args.out_dir, out_file)
+            print("Visualizing detected tables:")
             visualize_detected_tables(img, val, out_path)
     elif not key == 'image' and not key == 'tokens':
         for idx, elem in enumerate(val):
@@ -850,7 +855,7 @@ def output_result(key, val, args, img, img_file):
                 if args.visualize:
                     out_file = img_file.replace(".jpg", "_fig_cells.jpg")
                     out_path = os.path.join(args.out_dir, out_file)
-                    visualize_cells(img, elem, out_path)
+                    visualize_cells(img, val, out_path)
             else:
                 out_file = img_file.replace(".jpg", "_{}.{}".format(idx, key))
                 with open(os.path.join(args.out_dir, out_file), 'w') as f:
@@ -914,12 +919,18 @@ def main():
                                 out_html=args.html, out_csv=args.csv)
             print("Table(s) recognized.")
 
+            print("Extracted table:", extracted_table)
+            extracted_table["cells"] = extracted_table.pop("objects")
+
             for key, val in extracted_table.items():
                 output_result(key, val, args, img, img_file)
 
         if args.mode == 'detect':
+            print("Detecting table...")
             detected_tables = pipe.detect(img, tokens, out_objects=args.objects, out_crops=args.crops)
             print("Table(s) detected.")
+
+            print("Detected tables:", detected_tables)
 
             for key, val in detected_tables.items():
                 output_result(key, val, args, img, img_file)

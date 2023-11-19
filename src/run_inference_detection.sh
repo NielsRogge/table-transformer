@@ -1,0 +1,11 @@
+python inference.py --image_dir /Users/nielsrogge/Documents/python_projecten/table-transformer/detection_images \
+--mode detect \
+--structure_config_path structure_config.json \
+--structure_model_path /Users/nielsrogge/Documents/python_projecten/table-transformer/checkpoints/TATR-v1.1-All-msft.pth \
+--detection_config_path detection_config.json \
+--detection_model_path /Users/nielsrogge/Documents/python_projecten/table-transformer/checkpoints/pubtables1m_detection_detr_r18.pth \
+--structure_device cpu \
+--detection_device cpu \
+--objects \
+--visualize \
+--out_dir output
