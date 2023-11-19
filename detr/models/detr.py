@@ -30,6 +30,8 @@ class DETR(nn.Module):
                          DETR can detect in a single image. For COCO, we recommend 100 queries.
             aux_loss: True if auxiliary decoding losses (loss at each decoder layer) are to be used.
         """
+        print("Creating DETR...")
+
         super().__init__()
         self.num_queries = num_queries
         self.transformer = transformer
@@ -58,6 +60,9 @@ class DETR(nn.Module):
         """
         if isinstance(samples, (list, torch.Tensor)):
             samples = nested_tensor_from_tensor_list(samples)
+
+        print("First values of pixel values:", samples.tensors[0,0,:3,:3])
+
         features, pos = self.backbone(samples)
 
         src, mask = features[-1].decompose()

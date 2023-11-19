@@ -1,5 +1,5 @@
 python inference.py --image_dir /Users/nielsrogge/Documents/python_projecten/table-transformer/detection_images \
---mode detect \
+--mode extract \
 --structure_config_path structure_config.json \
 --structure_model_path /Users/nielsrogge/Documents/python_projecten/table-transformer/checkpoints/TATR-v1.1-All-msft.pth \
 --detection_config_path detection_config.json \
@@ -9,4 +9,4 @@ python inference.py --image_dir /Users/nielsrogge/Documents/python_projecten/tab
 --objects \
 --visualize \
 --verbose \
---out_dir output_detection
+--out_dir output_extraction

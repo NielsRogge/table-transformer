@@ -21,6 +21,9 @@ from .transformer import build_transformer
 class DETRMulti(nn.Module):
     """ This is the DETR module that performs object detection """
     def __init__(self, backbone, transformer, query_embed, num_classes, aux_loss=False):
+
+        print("Creating DETR multi...")
+
         """ Initializes the model.
         Parameters:
             backbone: torch module of the backbone to be used. See backbone.py
